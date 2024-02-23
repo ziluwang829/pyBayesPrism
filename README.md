@@ -1,5 +1,5 @@
 Usage
-'''
+```
 sc_dat_filtered = process_input.cleanup_genes(sc_dat, "count.matrix", "hs", \
                   ["Rb", "Mrp", "other_Rb", "chrM", "MALAT1", "chrX", "chrY"], 5)
                   
@@ -14,4 +14,4 @@ my_prism = prism.Prism.new(reference = sc_dat_filtered_pc,
                           outlier_fraction = 0.1)
 
 bp_res = my_prism.run(n_cores = 36, update_gibbs = True)      
-'''
+```
