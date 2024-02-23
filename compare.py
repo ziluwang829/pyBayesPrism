@@ -81,7 +81,6 @@ def step3(bp):
     assert list(bp.posterior_initial_cellState.Z.coords['cell_type'].values) == list(r_cs_Z_layer), "cs Z layer"
 
     # bp.posterior_initial_cellState.theta
-    import pdb;pdb.set_trace()
     assert np.corrcoef(bp.posterior_initial_cellState.theta.to_numpy().flatten(), r_cs_theta.to_numpy().flatten())[0, 1] > 0.999, "cs theta values"
     assert list(bp.posterior_initial_cellState.theta.index) == list(r_cs_theta.index), "cs theta index"
     assert list(bp.posterior_initial_cellState.theta.columns) == list(r_cs_theta.columns), "cs theta columns"
