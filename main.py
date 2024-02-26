@@ -171,21 +171,21 @@ df_x.index = df_x.index.str.upper()
 # df_x.columns = df_x.columns.str.upper()
 
 ######################################################
-ref = pd.read_csv("./testdata/[d]ref.csv", index_col=0)
-x = pd.read_csv("./testdata/[d]x.csv", index_col=0)
-ctl = list(pd.read_csv("./testdata/[d]ctl.csv").iloc[:,0])
-csl = list(pd.read_csv("./testdata/[d]csl.csv").iloc[:,0])
+# ref = pd.read_csv("./testdata/[d]ref.csv", index_col=0)
+# x = pd.read_csv("./testdata/[d]x.csv", index_col=0)
+# ctl = list(pd.read_csv("./testdata/[d]ctl.csv").iloc[:,0])
+# csl = list(pd.read_csv("./testdata/[d]csl.csv").iloc[:,0])
 
-assert np.all(df_ref.index == ref.index)
-assert np.all(df_ref.columns == ref.columns)
-assert np.allclose(df_ref.to_numpy(), ref.to_numpy())
-assert np.all(df_x.index == x.index)
-assert np.all(df_x.columns == x.columns)
-assert np.allclose(df_x.to_numpy(), x.to_numpy())
-assert np.all(ctl == cell_type_labels)
-assert np.all(ctl == cell_type_labels)
+# assert np.all(df_ref.index == ref.index)
+# assert np.all(df_ref.columns == ref.columns)
+# assert np.allclose(df_ref.to_numpy(), ref.to_numpy())
+# assert np.all(df_x.index == x.index)
+# assert np.all(df_x.columns == x.columns)
+# assert np.allclose(df_x.to_numpy(), x.to_numpy())
+# assert np.all(ctl == cell_type_labels)
+# assert np.all(ctl == cell_type_labels)
 
-import pdb;pdb.set_trace()
+# import pdb;pdb.set_trace()
 ######################################################
 if data_type == "scrna":
     if len(filter_chr) != 0:
