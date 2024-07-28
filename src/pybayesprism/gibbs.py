@@ -1,14 +1,16 @@
 import numpy as np
 import scipy
 import time
-import references
 from datetime import datetime, timedelta
 import multiprocessing
-import joint_post
-import theta_post
 from itertools import repeat
 import tqdm 
 import pandas as pd
+
+from pybayesprism import references
+from pybayesprism import joint_post
+from pybayesprism import theta_post
+
 
 #https://stackoverflow.com/questions/55818845/fast-vectorized-multinomial-in-python
 def multinomial_rvs(count, p):

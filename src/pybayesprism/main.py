@@ -1,9 +1,9 @@
 import argparse
 import pandas as pd
-import prism
-import process_input
 import pickle
 import numpy as np
+
+from pybayesprism import prism
 
 parser = argparse.ArgumentParser(description = 'Python Implementation of BayesPrism')
 

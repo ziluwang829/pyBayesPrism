@@ -1,4 +1,4 @@
-import prism
+from pybayesprism import prism
 import numpy as np
 import pandas as pd
 

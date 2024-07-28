@@ -1,4 +1,4 @@
-from prism import * 
+from pybayesprism.prism import *
 import warnings
 
 def get_fraction(bp, which_theta, state_or_type):

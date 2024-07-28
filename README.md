@@ -1,5 +1,10 @@
+This is a Python implementation of [BayesPrism](https://github.com/Danko-Lab/BayesPrism).
+
+
 Usage
 ```
+import pybayesprism import *
+
 sc_dat_filtered = process_input.cleanup_genes(sc_dat, "count.matrix", "hs", \
                   ["Rb", "Mrp", "other_Rb", "chrM", "MALAT1", "chrX", "chrY"], 5)
                   

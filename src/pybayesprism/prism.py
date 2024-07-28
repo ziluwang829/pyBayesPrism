@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
-from gibbs import GibbsSampler
-from joint_post import JointPost
-import process_input
-import references as rf
-import optim
+from pybayesprism.gibbs import GibbsSampler
+from pybayesprism.joint_post import JointPost
+from pybayesprism import process_input
+import pybayesprism.references as rf
+from pybayesprism import optim
 
 
 class Prism:

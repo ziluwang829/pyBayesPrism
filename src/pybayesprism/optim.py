@@ -2,10 +2,10 @@ import numpy as np
 import multiprocessing
 import xarray as xr 
 from scipy.optimize import minimize
-import process_input
-import references as rf 
 import pandas as pd
 
+from pybayesprism import process_input
+from pybayesprism import references as rf
 
 
 ####################################################

@@ -13,15 +13,16 @@ import gzip
 import importlib
 import time
 
-import extract 
-import gibbs
-import joint_post
-import optim
-import prism
-import process_input
-import references
-import theta_post
-import compare 
+from pybayesprism import extract
+from pybayesprism import gibbs
+from pybayesprism import joint_post
+from pybayesprism import optim
+from pybayesprism import prism
+from pybayesprism import process_input
+from pybayesprism import references
+from pybayesprism import theta_post
+from pybayesprism import compare
+
 
 def reload():
     # importlib.reload(compare)
