@@ -85,9 +85,9 @@ def assign_category(input_genes, species):
     assert len(species) == 2 and species in ["hs", "mm"]
     
     if species == "hs":
-        gene_list = pd.read_table("./txt/genelist.hs.new.txt", sep="\t", header=None)
+        gene_list = pd.read_table(__file__ + "/txt/genelist.hs.new.txt", sep="\t", header=None)
     if species == "mm":
-        gene_list = pd.read_table("./txt/genelist.mm.new.txt", sep="\t", header=None)
+        gene_list = pd.read_table(__file__ + "./txt/genelist.mm.new.txt", sep="\t", header=None)
 
     if sum(1 for gene in input_genes if gene[:3] == "ENS") > len(input_genes) * 0.8:
         print("EMSEMBLE IDs detected.")
@@ -141,7 +141,7 @@ def select_gene_type(input : pd.DataFrame, gene_type):
     assert all([g in ["protein_coding", "pseudogene", "lincRNA"] for g in gene_type])
     
     input_genes = input.columns
-    gene_tab_path = "./txt/gencode.v22.broad.category.txt"
+    gene_tab_path = __file__ + "/txt/gencode.v22.broad.category.txt"
     gene_list = pd.read_table(gene_tab_path, sep="\t", header=None)
     
     if sum(1 for gene in input_genes if gene[:3] == "ENS") > len(input_genes) * 0.8:
