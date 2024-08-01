@@ -39,7 +39,7 @@ def collapse(ref, labels):
         for label_i in labels_uniq:
             indices = [label_i == i for i in labels]
             ref_label = ref.loc[indices].to_numpy()
-            ref_collapsed = ref_collapsed.append(pd.Series(np.sum(ref_label, axis = 0)), ignore_index=True)
+            ref_collapsed = pd.concat([ref_collapsed, pd.Series(np.sum(ref_label, axis=0)).to_frame().T], ignore_index=True)
         ref_collapsed.index = labels_uniq
         ref_collapsed.columns = ref.columns
 

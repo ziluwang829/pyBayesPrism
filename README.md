@@ -6,7 +6,7 @@ Usage
 
 import os
 import pandas as pd
-from pybayesprism import process_input, prism
+from pybayesprism import process_input, prism, extract
 
 os.system("curl -L -O https://github.com/ziluwang829/pyBayesPrism/raw/main/data/data.tar.gz")
 os.system("mkdir -p BP_data")
@@ -33,5 +33,7 @@ my_prism = prism.Prism.new(reference = sc_dat_filtered_pc,
                           outlier_cut = 0.01, 
                           outlier_fraction = 0.1)
 
-bp_res = my_prism.run(n_cores = 36, update_gibbs = True)      
+bp_res = my_prism.run(n_cores = 36, update_gibbs = True)     
+
+theta = extract.get_fraction(bp_res, "final", "type")
 ```
