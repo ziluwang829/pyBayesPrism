@@ -2,10 +2,15 @@
 requires = ["setuptools>=72.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [project]
 name = "pybayesprism"
-version = "0.0.8"
+version = "0.0.9"
 dependencies = [
   "pandas",
   "numpy",
