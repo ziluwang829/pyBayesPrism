@@ -37,3 +37,5 @@ bp_res = my_prism.run(n_cores = 36, update_gibbs = True)
 
 theta = extract.get_fraction(bp_res, "final", "type")
 ```
+
+Remove data.tar.gz and BP_data folder.
