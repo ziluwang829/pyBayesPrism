@@ -8,16 +8,17 @@ import os
 import pandas as pd
 from pybayesprism import process_input, prism
 
-os.system("wget https://github.com/ziluwang829/pyBayesPrism/raw/main/data/data.tar.gz -O data.tar.gz")
-os.system("mkdir BP_data")
+os.system("curl -L -O https://github.com/ziluwang829/pyBayesPrism/raw/main/data/data.tar.gz")
+os.system("mkdir -p BP_data")
 os.system("tar -xzvf data.tar.gz -C BP_data")
 
 bk_dat = pd.read_csv("BP_data/bk_dat.csv", sep=",", index_col=0)
 sc_dat = pd.read_csv("BP_data/sc_dat.csv", sep=",", index_col=0)
 
-cell_state_labels = pd.read_csv("BP_data/cell_state_labels.csv", index_col=0)
-cell_type_labels = pd.read_csv("BP_data/cell_type_labels.csv", index_col=0)
 
+cell_state_labels = pd.read_csv("BP_data/cell_state_labels.csv", header=None).iloc[:,0].tolist()
+
+cell_type_labels = pd.read_csv("BP_data/cell_type_labels.csv", header=None).iloc[:,0].tolist()
 
 sc_dat_filtered = process_input.cleanup_genes(sc_dat, "count.matrix", "hs", \
                   ["Rb", "Mrp", "other_Rb", "chrM", "MALAT1", "chrX", "chrY"], 5)
