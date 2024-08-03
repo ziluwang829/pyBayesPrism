@@ -1,5 +1,4 @@
-This tutorial is tested with Python 3.8, but newer versions should be the same. 
-
+This tutorial is based on the [BayesPrism Tutorial](https://github.com/Danko-Lab/BayesPrism/blob/main/tutorial_deconvolution.pdf). It is tested with Python 3.8, but newer versions should work.
 
 ### Create and Use Python Virtual Environment venv
 
@@ -56,6 +55,9 @@ cell_type_labels = pd.read_csv("BP_data/cell_type_labels.csv", header=None).iloc
 
 Now, check the dataframes we just loaded.
 #### bk_dat
+
+`bk_dat` : The sample-by-gene raw count pandas dataframe of bulk RNA-seq expression. Index are bulk sample IDs, while columns are gene names/IDs.
+
 ```python
 bk_dat.shape
 ```
@@ -101,6 +103,9 @@ Index(['ENSG00000000003.13', 'ENSG00000000005.5', 'ENSG00000000419.11',
 <br/>
 
 #### sc_dat
+
+`sc_dat` : The cell-by-gene raw count pandas dataframe of single cell RNA-seq expression. Index are cell IDs, while columns are gene names/IDs. `sc_dat` should be a dense matrix.
+
 ```python
 sc_dat.shape
 ```
@@ -140,7 +145,14 @@ Index(['ENSG00000130876.10', 'ENSG00000134438.9', 'ENSG00000269696.1',
 ```
 <br/>
 
+Note that BayesPrism will perform deconvolution over genes shared between the mixture and scRNA- seq reference, i.e., by intersecting index(mixture) and columns(reference). Therefore, please make sure to use consistent gene annotations (TCGA RNA-seq uses GENCODE v22).
+
+We recommend the use of unnormalized and untransformed count data. When raw count is not available, linear normalization, such as TPM, RPM, RPKM, FPKM, is also acceptable, as BayesPrism is robust to linear multiplicative difference between the reference and mixture. Ideally, if using normalized data, it is the best to supply reference and bulk transformed by the same method. log transformation should be avoided.
+
 #### cell_state_labels
+
+`cell_type_labels` : a list of the same length as row count of `sc_dat` to denote the cell type of each cell in the reference.
+
 ```python
 len(cell_state_labels)
 ```
@@ -169,6 +181,10 @@ Name: count, Length: 73, dtype: int64
 <br/>
 
 #### cell_type_labels
+
+`cell.state_labels`  a list of the same length as row count of `sc_dat` to denote the cell state of each cell in the reference. In our example, cell states of malignant cells were obtained by sub-clustering the malignant cells from each patient, and cell states of myeloid cells were obtained by clustering myeloid cells from all patients. We de"ne multiple cell states for these two cell types, as they contain substantial heterogeneity while also having su$cient number of cells for sub-clustering.
+
+
 ```python
 len(cell_type_labels)
 ```
@@ -191,8 +207,18 @@ Name: count, dtype: int64
 ```
 <br/>
 
+
+Please make sure that all cell states contain a reasonable number of cells, e.g. >20 or >50, so that their profile can be represented accurately.
+
+What to supply for `cell_state_labels` and `cell_type_labels`? The definition of cell type and cell state can be somewhat arbitrary (similar to the issue of assigning cell types for scRNA-seq) and depends on the question of interest. Their definitions depend on the granularity we aim at and the confidence of the `cell_type_labels` in scRNA-seq data. Usually, a good rule of thumb is as follows. 
+
+1) Define cell types as the cluster of cells having a sufficient number of significantly differentially expressed genes than other cell types, e.g., greater than 50 or even 100. For clusters that are too similar in transcription, we recommend treating them as cell states, which will be summed up before the final Gibbs sampling. Therefore, cell states are often suitable for cells that form a continuum on the phenotypic manifold rather than distinct clusters. 
+2) Define multiple cell states for cell types of significant heterogeneity, such as malignant cells, and of interest to deconvolve their transcription.
+
 ### Process Input
-Remove the genes from selected groups.
+
+Next, we remove the genes from selected groups. Note that when sex is not identical between the reference and mixture, we recommend excluding genes from chrX and chrY. We also remove lowly transcribed genes, as the measurement of transcription of these genes tend to be noise-prone. Removal of these genes can also speed up computation.
+
 ```python
 sc_dat_filtered = process_input.cleanup_genes(sc_dat, "count.matrix", "hs", \
                   ["Rb", "Mrp", "other_Rb", "chrM", "MALAT1", "chrX", "chrY"], 5)
@@ -223,7 +249,9 @@ sc_dat_filtered.shape
 ```
 <br/>
 
-Select genes type by:
+
+We observe that protein coding genes are the most concordant group between two assays. To reduce batch effects and speed up computation, we perform deconvolution on protein coding genes. We have also tried to run BayesPrism on all genes. The results were similar.
+
 ```python
 sc_dat_filtered_pc = process_input.select_gene_type(sc_dat_filtered, ["protein_coding"])
 ```
@@ -237,6 +265,14 @@ Name: count, dtype: int64
 ```
 
 ### Construct a Prism Object
+
+A prism object contains all data required for running BayesPrism, namely, a scRNA-seq reference matrix, the cell type and cell state labels of each row of reference, and the mixture matrix for bulk RNA-seq.
+
+When using scRNA-seq count matrix as the input (recommended), user needs to specify `input_type = "count.matrix"`. The other option for `input_pe` is `"GEP"` (gene expression profile) which is a cell state by gene matrix. This option is used when using reference derived from other assays, such as sorted bulk data.
+
+The parameter key is a character in `cell_type_labels` that corresponds to the malignant cell type. Set to `None` if there are no malignant cells or the malignant cells between reference and mixture are from matched samples, in which case all cell types will be treated equally.
+
+
 ```python
 my_prism = prism.Prism.new(reference = sc_dat_filtered_pc, 
                           mixture = bk_dat, input_type = "count.matrix", 
@@ -267,6 +303,9 @@ Normalizing reference...
 ```
 
 ### Run BayesPrism
+
+Next, we start the run of BayesPrism.
+
 ```python
 bp_res = my_prism.run(n_cores = 10, update_gibbs = True)
 ```
